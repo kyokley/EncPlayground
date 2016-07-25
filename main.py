@@ -36,14 +36,14 @@ class Agent(object):
         sig = self.key.sign_rsassa_pss(digest.digest())
         return cipher_text, sig
 
-    def decrypt_message(self, message, public_key=None, sig=None):
+    def decrypt_message(self, message, signer_public_key=None, sig=None):
         digest = m2crypto.EVP.MessageDigest('sha512')
         digest.update(message)
-        if sig and public_key:
-            if public_key.verify_rsassa_pss(digest.digest(), sig) != 1:
+        if sig and signer_public_key:
+            if signer_public_key.verify_rsassa_pss(digest.digest(), sig) != 1:
                 print('Signature is invalid!')
                 return
-        elif sig or public_key:
+        elif sig or signer_public_key:
             print('Both sig and public_key are required to verify signature')
             return
 
@@ -59,7 +59,7 @@ def main():
     print message.encode('base64')
 
     plain_text = bob.decrypt_message(message,
-                                     public_key=alice.pub_key,
+                                     signer_public_key=alice.pub_key,
                                      sig=sig)
     print plain_text
 
