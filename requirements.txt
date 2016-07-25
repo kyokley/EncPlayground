@@ -1,0 +1,3 @@
+M2Crypto
+pdbpp
+bpython
